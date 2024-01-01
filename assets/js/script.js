@@ -1,46 +1,44 @@
 const start = document.querySelector('#start');
-start.addEventListener('click', init);
-
 const startScreen = document.querySelector('#start-screen');
 const questionScreen = document.querySelector('#questions');
 const endScreen = document.querySelector('#end-screen');
 const timerDisplay = document.querySelector('#time');
 const finalScore = document.querySelector('#final-score');
 const sendInitials = document.querySelector('#initials');
-
-
 const submitButton = document.querySelector('#submit');
-submitButton.addEventListener('click', storeData);
-
+const feedback = document.querySelector('#feedback');
 const correctSound = new Audio('./assets/sfx/correct.wav');
 const incorrectSound = new Audio('./assets/sfx/incorrect.wav')
-
-const feedback = document.querySelector('#feedback');
 
 let timeCount;
 let timer;
 let choiceBox = document.querySelector('#choices');
-let questionNum = 0;
+let usedQuestionNumbers = []; // check - does it add number to arr
+let questionNum = randomQuestion();
 let score = 0;
 let storedItems = [];
 
 
+//
 function init() {
     startScreen.classList.remove('start');
     startScreen.classList.add('hide');
 
     questionScreen.classList.remove('hide');
 
-    timeCount = 10;
+    timeCount = 25;
     startTimer();    
     generateQuestion();
 }
 
+start.addEventListener('click', init);
+
+//
 function startTimer() {
     
     timer = setInterval(function() {        
         timerDisplay.textContent = timeCount;
-        timeCount--;
+        timeCount -= 1;
         if (timeCount < 0) {
             timerDisplay.textContent = 0 ;
             endgame();
@@ -49,6 +47,16 @@ function startTimer() {
     
 }
 
+//
+function randomQuestion() {
+    let randomNumber;
+    do { randomNumber = Math.floor(Math.random() * questionList.length);  //check   
+    } while (usedQuestionNumbers.includes(randomNumber));
+    usedQuestionNumbers.push(randomNumber);
+    return randomNumber;    
+}
+
+//
 function generateQuestion() {
     let question = questionList[questionNum]; 
     document.querySelector('#question-title').textContent = question.title;
@@ -61,10 +69,10 @@ function generateQuestion() {
     }
 }
 
+//
 choiceBox.addEventListener("click", function(event) {
-
     let button = event.target
-
+    
     if (timeCount === 0) {
         return;
     }
@@ -72,13 +80,14 @@ choiceBox.addEventListener("click", function(event) {
     let correctButton = questionList[questionNum].choices[answer];
     
     if (button.textContent === correctButton) {
-        questionNum++;
-        score++;
+        questionNum = randomQuestion(); //check
+        score += 1;
         correctSound.play();
         displayFeedback('Correct Answer!')
 
-        if(questionNum < questionList.length) {
-            generateQuestion();
+        if(usedQuestionNumbers.length < questionList.length + 1) { //check
+            generateQuestion(); // check this part if number adds to the list
+            
         } else {
             endgame();
         }
@@ -90,6 +99,7 @@ choiceBox.addEventListener("click", function(event) {
     }
 })
 
+//
 function endgame() {
     clearInterval(timer);
     questionScreen.classList.add('hide');
@@ -97,6 +107,7 @@ function endgame() {
     finalScore.textContent = score;
 }
 
+//
 function storeData() {
     let textInitials = sendInitials.value.toUpperCase();
     if (textInitials !== '') {
@@ -109,6 +120,9 @@ function storeData() {
     }
 }
 
+submitButton.addEventListener('click', storeData);
+
+//
 function displayFeedback(message) {
 
     feedback.textContent = message;
