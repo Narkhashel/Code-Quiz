@@ -1,13 +1,14 @@
+//js file to take care of logic of highscore page
 const scoreList = document.querySelector('#highscores');
 const clearScore = document.querySelector('#clear');
-clearScore.addEventListener('click', clearEvent);
 
+// Function to 
 function getScore () {
     let storedScore = JSON.parse(localStorage.getItem('highscore'));
 
     if (storedScore) {
         descendingScore(storedScore);
-        
+    // For loop to create score list from local storage    
     for (let i = 0; i < storedScore.length; i++) {
         let newList = document.createElement('li');
         newList.textContent = storedScore[i];
@@ -16,7 +17,7 @@ function getScore () {
         return;
     }
 }
-
+// Function to create descending score list
 function descendingScore (item) {
     item.sort((a, b) => {
         const scoreA = parseInt(a.split(" - ")[1]);
@@ -24,8 +25,7 @@ function descendingScore (item) {
         return scoreB - scoreA;
     });
 }
-
-
+//Display score list automatically
 getScore();
 
 function clearEvent() {
@@ -33,4 +33,4 @@ function clearEvent() {
     localStorage.clear();
 }
 
-
+clearScore.addEventListener('click', clearEvent);
