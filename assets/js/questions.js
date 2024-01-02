@@ -100,6 +100,46 @@ let questionList = [
         title: 'In Twilight Imperium 4th Edition, how many Victory Points do you get for eliminating another player?',
         choices: ['Zero', 'One', "All Victory Points of that player",'Three'],
         correctAnswer: 0,
-    }    
+    }, 
+    {  // NOwe
+        title: 'How many Strategy Cards are drawn at the beginning of each game round?',
+        choices: ['One', 'None', "Two",'Three'],
+        correctAnswer: 0,
+    }, 
+    {  
+        title: 'Which resource type is NOT produced by planets?',
+        choices: ['Influence', 'Trade Goods', "Command Tokens",'Victory Points'],
+        correctAnswer: 3,
+    },
+    {  
+        title: 'In the game, what is the role of the Speaker token?',
+        choices: ['Choose the first Strategy Card', 'Determine turn order', "Gain bonus resources",'Control the galaxy center'],
+        correctAnswer: 0,
+    },
+    {  
+        title: 'Which component of the game determines if a player can activate units during a turn?',
+        choices: ['Strategy Cards', 'Command Tokens', "Action Cards",'Technology Cards'],
+        correctAnswer: 1,
+    },
+    {  
+        title: 'What is the purpose of the "Imperial" Strategy Card?',
+        choices: ['Diplomatic negotiations', 'Gain trade goods', " Build units",'Score objectives'],
+        correctAnswer: 3,
+    },
+    {  
+        title: 'Which of the following is NOT a type of unit in Twilight Imperium?',
+        choices: ['Dreadnought', 'Destroyer', "Sentinel", 'Cruiser'],
+        correctAnswer: 2,
+    },
+    {  
+        title: 'What is the function of the "Agenda Phase" in Twilight Imperium?',
+        choices: ['Score points', 'Resolve political decisions', "Trade resources",'Move units'],
+        correctAnswer: 1,
+    },  
+    {  
+        title: 'What is the maximum number of action cards a player can have in their hand at any given time?',
+        choices: ['Three', 'Ten', "Seven",'Twelve'],
+        correctAnswer: 2,
+    }  
 ]
 
