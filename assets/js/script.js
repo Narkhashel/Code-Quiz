@@ -18,17 +18,17 @@ let storedItems = [];
 let usedQuestionNumbers = [];
 let questionNum = 0;
 
-//
+// Function to initiatie game, hide first div and start a new one
 function init() {
     startScreen.classList.remove('start');
     startScreen.classList.add('hide');
-    questionScreen.classList.remove('hide');
+    questionScreen.classList.remove('hide'); 
     timeCount = 45;
     startTimer(); 
-    questionList.sort(()=> Math.random()-0.5);   
-    generateQuestion();
+    questionList.sort(()=> Math.random()-0.5);   //Randomize question array
+    generateQuestion();                         
 }
-//
+// Game timer, it stops the game when time is out
 function startTimer() {
     timer = setInterval(function() {        
         timerDisplay.textContent = timeCount;
@@ -40,19 +40,19 @@ function startTimer() {
     }, 1000);
 }
 
-//
+// Function to display Question
 function generateQuestion(i) {
     let question = questionList[questionNum]; 
     document.querySelector('#question-title').textContent = question.title;
     choiceBox.innerHTML = '';
-
+// for loop to generate buttons for a new question
     for (let i = 0; i < question.choices.length; i++) {
         let choiceButton = document.createElement('button');
         choiceButton.textContent = question.choices[i];
         choiceBox.appendChild(choiceButton);
     }
 }
-//
+// Function to change screen display score
 function endgame() {
     clearInterval(timer);
     questionScreen.classList.add('hide');
@@ -60,6 +60,7 @@ function endgame() {
     finalScore.textContent = score;
 }
 
+// Function to display correct/wrong answer during the game
 function displayFeedback(message) {
     feedback.textContent = message;
     feedback.classList.remove('hide');
@@ -68,24 +69,25 @@ function displayFeedback(message) {
     }, 1000);
 }
 
+// Function to store score and initials in a local storage
 function storeData() {
     let textInitials = sendInitials.value.toUpperCase();
     if (textInitials !== '') {
     storedItems = JSON.parse(localStorage.getItem('highscore')) || [];
     storedItems.push(`${textInitials} - ${score}`);
     localStorage.setItem('highscore', JSON.stringify(storedItems));
-    window.location.href = 'highscores.html';
+    window.location.href = 'highscores.html'; // to take us to highscore screen
     } else {
         displayFeedback('PLease type your initials.')
     }
 }
 
-//
+//Event Listener to generate next question
 choiceBox.addEventListener("click", function(event) {
     let button = event.target
     let answer = questionList[questionNum].correctAnswer;
     let correctButton = questionList[questionNum].choices[answer];
-    
+    //if stament to check if answer is wrong/correct
     if (button.textContent === correctButton) {
         score += 1;
         correctSound.play(); 
@@ -95,15 +97,15 @@ choiceBox.addEventListener("click", function(event) {
         timeCount -= 3;
         displayFeedback('Wrong Answer!')
     }
-
-    if(questionNum !== questionList.length - 1) {
+    //if statment to finish game if time is out or we out of questions
+    if(questionNum !== questionList.length - 1) { 
         questionNum += 1;
         generateQuestion();           
     } else {
         endgame();
     }
 })
-
+// Event Listiner to initiate game
 start.addEventListener('click', init);
-
+// Event Listiner to submit data to local storage
 submitButton.addEventListener('click', storeData);
