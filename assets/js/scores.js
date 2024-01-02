@@ -32,5 +32,5 @@ function clearEvent() {
     scoreList.innerHTML = '';
     localStorage.clear();
 }
-
+// Event to clear score list 
 clearScore.addEventListener('click', clearEvent);
