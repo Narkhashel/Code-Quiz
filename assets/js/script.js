@@ -23,7 +23,7 @@ function init() {
     startScreen.classList.remove('start');
     startScreen.classList.add('hide');
     questionScreen.classList.remove('hide');
-    timeCount = 30;
+    timeCount = 45;
     startTimer(); 
     questionList.sort(()=> Math.random()-0.5);   
     generateQuestion();
