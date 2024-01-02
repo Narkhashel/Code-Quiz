@@ -9,33 +9,27 @@ const submitButton = document.querySelector('#submit');
 const feedback = document.querySelector('#feedback');
 const correctSound = new Audio('./assets/sfx/correct.wav');
 const incorrectSound = new Audio('./assets/sfx/incorrect.wav')
+const choiceBox = document.querySelector('#choices');
 
 let timeCount;
-let timer;
-let choiceBox = document.querySelector('#choices');
-let usedQuestionNumbers = []; // check - does it add number to arr
-let questionNum = randomQuestion();
+let timer; 
 let score = 0;
 let storedItems = [];
-
+let usedQuestionNumbers = [];
+let questionNum = 0;
 
 //
 function init() {
     startScreen.classList.remove('start');
     startScreen.classList.add('hide');
-
     questionScreen.classList.remove('hide');
-
-    timeCount = 25;
-    startTimer();    
+    timeCount = 30;
+    startTimer(); 
+    questionList.sort(()=> Math.random()-0.5);   
     generateQuestion();
 }
-
-start.addEventListener('click', init);
-
 //
 function startTimer() {
-    
     timer = setInterval(function() {        
         timerDisplay.textContent = timeCount;
         timeCount -= 1;
@@ -44,20 +38,10 @@ function startTimer() {
             endgame();
         }
     }, 1000);
-    
 }
 
 //
-function randomQuestion() {
-    let randomNumber;
-    do { randomNumber = Math.floor(Math.random() * questionList.length);  //check   
-    } while (usedQuestionNumbers.includes(randomNumber));
-    usedQuestionNumbers.push(randomNumber);
-    return randomNumber;    
-}
-
-//
-function generateQuestion() {
+function generateQuestion(i) {
     let question = questionList[questionNum]; 
     document.querySelector('#question-title').textContent = question.title;
     choiceBox.innerHTML = '';
@@ -68,37 +52,6 @@ function generateQuestion() {
         choiceBox.appendChild(choiceButton);
     }
 }
-
-//
-choiceBox.addEventListener("click", function(event) {
-    let button = event.target
-    
-    if (timeCount === 0) {
-        return;
-    }
-    let answer = questionList[questionNum].correctAnswer;
-    let correctButton = questionList[questionNum].choices[answer];
-    
-    if (button.textContent === correctButton) {
-        questionNum = randomQuestion(); //check
-        score += 1;
-        correctSound.play();
-        displayFeedback('Correct Answer!')
-
-        if(usedQuestionNumbers.length < questionList.length + 1) { //check
-            generateQuestion(); // check this part if number adds to the list
-            
-        } else {
-            endgame();
-        }
-    } else {
-        incorrectSound.play();
-        timeCount -= 3;
-        displayFeedback('Wrong Answer!')
-
-    }
-})
-
 //
 function endgame() {
     clearInterval(timer);
@@ -107,7 +60,14 @@ function endgame() {
     finalScore.textContent = score;
 }
 
-//
+function displayFeedback(message) {
+    feedback.textContent = message;
+    feedback.classList.remove('hide');
+        setTimeout(function() {
+        feedback.classList.add('hide');
+    }, 1000);
+}
+
 function storeData() {
     let textInitials = sendInitials.value.toUpperCase();
     if (textInitials !== '') {
@@ -120,15 +80,30 @@ function storeData() {
     }
 }
 
-submitButton.addEventListener('click', storeData);
-
 //
-function displayFeedback(message) {
-
-    feedback.textContent = message;
-    feedback.classList.remove('hide');
+choiceBox.addEventListener("click", function(event) {
+    let button = event.target
+    let answer = questionList[questionNum].correctAnswer;
+    let correctButton = questionList[questionNum].choices[answer];
     
-    setTimeout(function() {
-        feedback.classList.add('hide');
-    }, 1000);
-}
+    if (button.textContent === correctButton) {
+        score += 1;
+        correctSound.play(); 
+        displayFeedback('Correct Answer!')
+    } else {
+        incorrectSound.play();
+        timeCount -= 3;
+        displayFeedback('Wrong Answer!')
+    }
+
+    if(questionNum !== questionList.length - 1) {
+        questionNum += 1;
+        generateQuestion();           
+    } else {
+        endgame();
+    }
+})
+
+start.addEventListener('click', init);
+
+submitButton.addEventListener('click', storeData);
